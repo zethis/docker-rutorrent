@@ -1,0 +1,39 @@
+## Logs
+system.daemon.set = true
+log.open_file = "rtorrent", "/tmp/rtorrent.log"
+log.add_output = "info", "rtorrent"
+log.add_output = "critical", "rtorrent"
+log.add_output = "error", "rtorrent"
+log.add_output = "warn", "rtorrent"
+log.add_output = "notice", "rtorrent"
+log.add_output = "debug", "rtorrent"
+
+## General
+directory.default.set = /data/torrents
+session.path.set = /data/.session
+protocol.encryption.set = allow_incoming, try_outgoing, enable_retry
+ip = <WAN_IP>
+
+## Network
+network.scgi.open_port = 127.0.0.1:5000
+network.port_range.set = <PORT_RTORRENT>-<PORT_RTORRENT>
+network.port_random.set = no
+pieces.hash.on_completion.set = no
+
+trackers.use_udp.set = yes
+dht.port = <DHT_RTORRENT>
+protocol.pex.set = no
+throttle.min_peers.normal.set = 1
+throttle.max_peers.normal.set = 100
+throttle.min_peers.seed.set = 1
+throttle.max_peers.seed.set = 50
+throttle.max_uploads.set = 15
+
+## Divers
+encoding.add = utf8
+
+## Scheduling
+execute2 = {sh,-c,/usr/bin/php /var/www/html/torrent/php/initplugins.php torrent &}
+schedule2 = watch_directory,1,1,"load.start=/data/.watch/*.torrent"
+schedule2 = untied_directory,5,5,"stop_untied=/data/.watch/*.torrent"
+schedule2 = espace_disque_insuffisant,1,30,close_low_diskspace=500M

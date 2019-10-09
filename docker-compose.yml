@@ -1,0 +1,15 @@
+version: "2"
+services:
+  rutorrent:
+    container_name: test-torrent
+    image: mobile:latest
+    restart: unless-stopped
+    ports:
+      - "45569:45566"
+      - "9529:9527/udp"
+      - "49000:45000"
+    network_mode: "host"
+    environment:
+      - UID=1000
+      - GID=1000
+      - TZ=Europe/Paris
